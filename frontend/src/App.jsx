@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import StockChart from './StockChart'
 
 function App() {
   // 1. STATE MANAGEMENT
@@ -65,6 +66,11 @@ function App() {
           <h2>{stockData.symbol}</h2>
           <p>Price: ${stockData.price}</p>
           <p>Change: {stockData.change_percent}</p>
+
+          {/* This logic checks: "Do we have history? If yes, show the chart." */}
+          {stockData.history && stockData.history.length > 0 && (
+             <StockChart info={stockData} />
+          )}
         </div>
       )}
     </div>
