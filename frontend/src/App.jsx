@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import StockChart from './StockChart'
 
@@ -7,6 +7,7 @@ function App() {
   const [stockData, setStockData] = useState(null)
   const [ticker, setTicker] = useState("") // Captures user keystrokes
   const [error, setError] = useState(null) // Captures error messages
+  const [history, setHistory] = useState([]) // Captures search history
 
   // 2. THE SEARCH FUNCTION
   // This only runs when the user submits the form
@@ -31,6 +32,7 @@ function App() {
       .then(data => {
         console.log("Data received:", data)
         setStockData(data) // Save the DTO
+        fetchHistory()
       })
       .catch(err => {
         console.error(err)
@@ -38,6 +40,17 @@ function App() {
       })
   }
 
+  const fetchHistory = () => {
+    fetch('http://127.0.0.1:5000/api/history')
+    .then(response => response.json())
+    .then(data => setHistory(data))
+    .catch(err => console.error(err))
+  }
+
+  useEffect(() => {
+    fetchHistory()
+  }, [])
+  
   // 3. THE RENDER
   return (
     <div className="App">
@@ -71,6 +84,16 @@ function App() {
           {stockData.history && stockData.history.length > 0 && (
              <StockChart info={stockData} />
           )}
+        </div>
+      )}
+      {history.length > 0 && (
+        <div>
+          <h2>Search History</h2>
+          <ul>
+            {history.map(item => (
+              <li key={item.id}>{item.symbol} - ${item.price}</li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
