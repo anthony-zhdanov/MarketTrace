@@ -1,57 +1,87 @@
+/* 1. Global Reset & Root */
 #root {
-  max-width: 1280px;
+  max-width: 100%;       /* Let the dashboard take up the full screen width */
+  margin: 0;
+  padding: 20px;
+  text-align: left;      /* Reset text alignment (data looks better left-aligned) */
+  box-sizing: border-box;
+}
+
+/* 2. The Layout Engine (Flexbox) */
+.dashboard-container {
+  display: flex;         /* SIDE-BY-SIDE MODE */
+  gap: 20px;             /* Space between Chart and Sidebar */
+  align-items: flex-start;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 1600px;     /* Cap the width for huge monitors */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-ul {
-  list-style-type: none;
-  padding: 0;
+/* 3. The Main Work Area (Left - 75%) */
+.main-content {
+  flex: 3;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
 }
 
-li {
-  background: #696969;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-weight: bold;
-  border: 1px solid #5e5e5e;
+/* 4. The Sidebar (Right - 25%) */
+.sidebar {
+  flex: 1;
+  background: #f8f9fa;   /* Light gray sidebar background */
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e1e4e8;
+  height: 85vh;          /* Tall fixed height */
+  overflow-y: auto;      /* Scrollable if you search too many stocks */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
+
+.sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+/* 5. Watchlist Items (The Sidebar Cards) */
+.watchlist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border-left: 4px solid #4db8ff; /* Blue accent strip */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.watchlist-item:hover {
+  transform: translateX(5px); /* Slide effect on hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.watchlist-item .symbol {
+  font-weight: 800;
+  font-size: 1.1em;
+  color: #2c3e50;
+}
+
+.watchlist-item .price {
+  font-family: 'Courier New', monospace; /* Monospace font for numbers */
+  font-weight: 600;
+  color: #333;
+}
+
+/* 6. The Main Card (Stock Info & Chart) */
 .card {
+  background: white;
   padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #f0f0f0;
 }

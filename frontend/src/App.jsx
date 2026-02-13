@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import StockChart from './StockChart'
+import TradingViewWidget from './TradingViewWidget'
 
 function App() {
   // 1. STATE MANAGEMENT
@@ -52,52 +52,61 @@ function App() {
   }, [])
   
   // 3. THE RENDER
-  return (
-    <div className="App">
-      <h1>Financial Dashboard</h1>
+// ... imports and logic remain the same ...
 
-      {/* THE SEARCH BAR */}
-      <form onSubmit={fetchStock}>
-        <input
-          type="text"
-          placeholder="Enter Stock Symbol (e.g. AAPL)"
-          value={ticker}
-          onChange={(e) => setTicker(e.target.value)} // Update state on every keystroke
-        />
-        <button type="submit">Search</button>
-      </form>
+return (
+  <div className="App">
+    <h1>MarketTrace</h1>
+    
+    {/* 1. THE BIG CONTAINER */}
+    <div className="dashboard-container">
 
-      {/* ERROR MESSAGE */}
-      {error && <p style={{color: 'red'}}>{error}</p>}
+      {/* 2. LEFT COLUMN: Main Work Area */}
+      <div className="main-content">
+        <form onSubmit={fetchStock}>
+          <input
+            type="text"
+            placeholder="Enter Stock Symbol (e.g. AAPL)"
+            value={ticker}
+            onChange={(e) => setTicker(e.target.value)}
+          />
+          <button type="submit">Search</button>
+        </form>
 
-      {/* LOADING STATE */}
-      {!stockData && !error && <p>Enter a symbol to see the price.</p>}
+        {error && <p style={{color: 'red'}}>{error}</p>}
+        {!stockData && !error && <p>Enter a symbol to see the price.</p>}
 
-      {/* SUCCESS STATE (The Card) */}
-      {stockData && (
-        <div className="card">
-          <h2>{stockData.symbol}</h2>
-          <p>Price: ${stockData.price}</p>
-          <p>Change: {stockData.change_percent}</p>
+        {stockData && (
+          <div className="card">
+            <h2>{stockData.symbol}</h2>
+            <p>Price: ${stockData.price}</p>
+            <p>Change: {stockData.change_percent}</p>
 
-          {/* This logic checks: "Do we have history? If yes, show the chart." */}
-          {stockData.history && stockData.history.length > 0 && (
-             <StockChart info={stockData} />
-          )}
+            {/* TradingView chart driven by the current search result */}
+            <TradingViewWidget symbol={stockData.symbol} />
+          </div>
+        )}
+      </div>
+
+      {/* 3. RIGHT COLUMN: The Sidebar */}
+      <div className="sidebar">
+        <h3>Recent Searches</h3>
+        {/* If history is empty, show a message */}
+        {history.length === 0 && <p>No recent searches</p>}
+        
+        <div className="watchlist-grid">
+          {history.map(item => (
+            <div key={item.id} className="watchlist-item">
+              <span className="symbol">{item.symbol}</span>
+              <span className="price">${item.price}</span>
+            </div>
+          ))}
         </div>
-      )}
-      {history.length > 0 && (
-        <div>
-          <h2>Search History</h2>
-          <ul>
-            {history.map(item => (
-              <li key={item.id}>{item.symbol} - ${item.price}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  )
+      </div>
+
+    </div> {/* End dashboard-container */}
+  </div>
+)
 }
 
 export default App
