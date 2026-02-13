@@ -1,9 +1,13 @@
 # Ignore all environment files in any folder
 **/.env
 
+# Ignore all .db files
+*.db
+
 # Ignore Python system files
 **/__pycache__/
 **/*.pyc
 
 # Ignore Mac system files (optional but recommended)
 .DS_Store
+

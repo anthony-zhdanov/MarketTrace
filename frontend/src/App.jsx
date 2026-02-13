@@ -78,10 +78,6 @@ return (
 
         {stockData && (
           <div className="card">
-            <h2>{stockData.symbol}</h2>
-            <p>Price: ${stockData.price}</p>
-            <p>Change: {stockData.change_percent}</p>
-
             {/* TradingView chart driven by the current search result */}
             <TradingViewWidget symbol={stockData.symbol} />
           </div>

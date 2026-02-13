@@ -16,26 +16,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///finance.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-def generate_mock_data(): 
-    mock_data = []
-    base_price = 150.00
-
-    for i in range(30):
-        change = random.uniform(-5, 5)
-        price = base_price + change
-        mock_data.append({
-            "date": f"2023-11-{i+1:02d}",
-            "price": round(price, 2)
-        })
-        base_price = price
-
-    return {
-        "symbol": "TEST_MOCK",
-        "price": round(base_price, 2),
-        "change_percent": "0.42%",
-        "history": mock_data
-    }
-
 class SearchHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     symbol = db.Column(db.String(10), nullable=False)
@@ -54,31 +34,7 @@ class SearchHistory(db.Model):
 def get_stock_price(ticker):
     ticker = ticker.upper()
 
-    # --- 1. MOCK DATA MODE (No API usage) ---
-    if ticker == "TEST":
-        # Create a fake historical dataset for the chart
-        mock_history = [
-            {"date": "2023-11-01", "price": 150.00},
-            {"date": "2023-11-02", "price": 152.50},
-            {"date": "2023-11-03", "price": 151.00},
-            {"date": "2023-11-04", "price": 155.00},
-            {"date": "2023-11-05", "price": 158.00},
-            # ... you can keep the list shorter for readability
-        ]
-        
-        # SAVE TO DB (Even mock searches get saved!)
-        new_search = SearchHistory(symbol="TEST", price=150.00)
-        db.session.add(new_search)
-        db.session.commit()
-
-        return jsonify({
-            'symbol': 'TEST_MOCK',
-            'price': 150.00,
-            'change_percent': '+1.5%',
-            'history': mock_history
-        })
-
-    # --- 2. REAL API MODE ---
+    # --- REAL API MODE ---
     api_key = os.getenv("ALPHA_VANTAGE_KEY")
     url = f'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={api_key}'
 
