@@ -9,31 +9,41 @@
 
 /* 2. The Layout Engine (Flexbox) */
 .dashboard-container {
-  display: flex;         /* SIDE-BY-SIDE MODE */
-  gap: 20px;             /* Space between Chart and Sidebar */
+  display: flex;
+  gap: 24px;
   align-items: flex-start;
-  margin: 0 auto;
-  max-width: 1600px;     /* Cap the width for huge monitors */
+  margin: 0;
+  width: 100%;
+  max-width: none;
 }
 
-/* 3. The Main Work Area (Left - 75%) */
 .main-content {
-  flex: 3;
+  flex: 1;
+  min-width: 0;
+  height: 85vh;  /* explicit height so flex children (and TradingView container) get a resolved height */
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* 4. The Sidebar (Right - 25%) */
-.sidebar {
+.main-content .card {
   flex: 1;
-  background: #f8f9fa;   /* Light gray sidebar background */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar {
+  flex: 0 0 280px;
+  margin-left: auto;
+  background: #f8f9fa;
   padding: 20px;
   border-radius: 12px;
   border: 1px solid #e1e4e8;
-  height: 85vh;          /* Tall fixed height */
-  overflow-y: auto;      /* Scrollable if you search too many stocks */
+  height: 85vh;
+  overflow-y: auto;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-align: right;
 }
 
 .sidebar h3 {
@@ -77,11 +87,28 @@
   color: #333;
 }
 
-/* 6. The Main Card (Stock Info & Chart) */
 .card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 80%;
+  min-width: 0;
   background: white;
-  padding: 2em;
+  padding: 1.5em;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   border: 1px solid #f0f0f0;
+}
+
+.card .tradingview-widget-container {
+  flex: 1;
+  min-height: 60vh;  /* TradingView needs an explicit height on the container for autosize to work */
+  width: 100%;
+}
+
+/* Force the injected iframe to fill the container */
+.card .tradingview-widget-container iframe {
+  height: 100% !important;
+  width: 100% !important;
 }

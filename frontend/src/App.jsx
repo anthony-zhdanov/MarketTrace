@@ -3,40 +3,30 @@ import './App.css'
 import TradingViewWidget from './TradingViewWidget'
 
 function App() {
-  // 1. STATE MANAGEMENT
   const [stockData, setStockData] = useState(null)
-  const [ticker, setTicker] = useState("") // Captures user keystrokes
-  const [error, setError] = useState(null) // Captures error messages
-  const [history, setHistory] = useState([]) // Captures search history
+  const [ticker, setTicker] = useState("")
+  const [error, setError] = useState(null)
+  const [history, setHistory] = useState([])
 
-  // 2. THE SEARCH FUNCTION
-  // This only runs when the user submits the form
   const fetchStock = (e) => {
-    e.preventDefault() // STOP the page from reloading!
-
-    // Reset errors and show loading state (optional logic)
+    e.preventDefault()
     setError(null)
     setStockData(null)
 
-    console.log(`Fetching data for: ${ticker}`)
-
-    // Dynamic URL based on the 'ticker' state
     fetch(`http://127.0.0.1:5000/api/stock/${ticker}`)
       .then(response => {
         if (!response.ok) {
-            // If the server returns 400 or 500, throw an error
-            throw new Error("Stock not found or API limit reached")
+          throw new Error("Stock not found or API limit reached")
         }
         return response.json()
       })
       .then(data => {
-        console.log("Data received:", data)
-        setStockData(data) // Save the DTO
+        setStockData(data)
         fetchHistory()
       })
       .catch(err => {
         console.error(err)
-        setError(err.message) // Save the error text to display it
+        setError(err.message)
       })
   }
 
@@ -50,18 +40,11 @@ function App() {
   useEffect(() => {
     fetchHistory()
   }, [])
-  
-  // 3. THE RENDER
-// ... imports and logic remain the same ...
 
-return (
+  return (
   <div className="App">
     <h1>MarketTrace</h1>
-    
-    {/* 1. THE BIG CONTAINER */}
     <div className="dashboard-container">
-
-      {/* 2. LEFT COLUMN: Main Work Area */}
       <div className="main-content">
         <form onSubmit={fetchStock}>
           <input
@@ -78,16 +61,12 @@ return (
 
         {stockData && (
           <div className="card">
-            {/* TradingView chart driven by the current search result */}
             <TradingViewWidget symbol={stockData.symbol} />
           </div>
         )}
       </div>
-
-      {/* 3. RIGHT COLUMN: The Sidebar */}
       <div className="sidebar">
         <h3>Recent Searches</h3>
-        {/* If history is empty, show a message */}
         {history.length === 0 && <p>No recent searches</p>}
         
         <div className="watchlist-grid">
@@ -100,7 +79,7 @@ return (
         </div>
       </div>
 
-    </div> {/* End dashboard-container */}
+    </div>
   </div>
 )
 }

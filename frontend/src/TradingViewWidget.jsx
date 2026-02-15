@@ -1,20 +1,14 @@
 import React, { useEffect, useRef, memo } from 'react';
 
-/**
- * TradingViewWidget
- *
- * A thin React wrapper around TradingView's Advanced Chart widget.
- * The chart automatically reloads whenever the `symbol` prop changes,
- * making it easy to plug into the search flow.
- */
 function TradingViewWidget({ symbol }) {
-  const container = useRef(null);
+  const containerRef = useRef(null);
+  const widgetRef = useRef(null);
 
   useEffect(() => {
-    if (!container.current) return;
+    if (!containerRef.current || !widgetRef.current) return;
 
-    // Clear any existing widget content so we can render a fresh chart
-    container.current.innerHTML = '';
+    /* Only clear the widget div so TradingView can inject the iframe there; don't wipe the whole container */
+    widgetRef.current.innerHTML = '';
 
     const script = document.createElement('script');
     script.src =
@@ -37,18 +31,26 @@ function TradingViewWidget({ symbol }) {
       }
     `;
 
-    container.current.appendChild(script);
+    widgetRef.current.appendChild(script);
   }, [symbol]);
 
   return (
     <div
       className="tradingview-widget-container"
-      ref={container}
-      style={{ height: '100%', width: '100%' }}
+      ref={containerRef}
+      style={{
+        flex: 1,
+        minHeight: 0,
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
       <div
+        ref={widgetRef}
         className="tradingview-widget-container__widget"
-        style={{ height: '100%', width: '100%' }}
+        style={{ flex: 1, minHeight: 0, width: '100%', height: '100%' }}
       />
     </div>
   );

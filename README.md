@@ -1,4 +1,5 @@
 ## MarketTrace
+
 MarketTrace is a small project built to learn the basics of full‑stack development and data‑driven web apps.
 
 ---
@@ -59,7 +60,7 @@ MarketTrace is a small project built to learn the basics of full‑stack develop
 ### Frontend (React app)
 
 - **Building a simple SPA with React**
-  - Structuring the app into components (`App`, `TradingViewWidget`, `StockChart`).
+  - Structuring the app into components (`App`, `TradingViewWidget`).
   - Using Vite as the frontend build tool.
 
 - **State and side‑effect management with hooks**
@@ -80,11 +81,6 @@ MarketTrace is a small project built to learn the basics of full‑stack develop
   - Wrapping the **TradingView Advanced Chart** widget in a React component.
   - Dynamically updating the symbol when the user searches for a new ticker.
   - Managing DOM integration with `useRef` and `useEffect`.
-
-- **Data visualization basics**
-  - Setting up a reusable `StockChart` component using **Chart.js** via `react-chartjs-2`.
-  - Preparing timeseries data (labels + values) for plotting.
-  - Customizing chart appearance (colors, titles, legend).
 
 ### Full‑stack concepts
 
